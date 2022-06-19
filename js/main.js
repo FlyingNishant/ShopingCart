@@ -6,8 +6,8 @@ let loadShop = () => {
         let {id, title, desc, img, price} = item;
         let search = cart.find((x)=> x.id === id);
         return `
-            <div id={item-${id}} class="itme-card">
-                <img src="${img}" width="220">
+            <div id={item-${id}} class="item-card">
+                <img src="${img}">
                 <div class="details">
                     <h3>${title}</h3>
                     <p>${desc}</p>

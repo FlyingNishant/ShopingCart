@@ -8,10 +8,14 @@ let calculateTotalItem = ()=>{
 }
 
 let generateCartItem = ()=>{
+    debugger;
     if(cart.length !== 0){
-        return (shopingCart.innerHTML = cart.map((x) => {
+        debugger;
+        shopingCart.innerHTML = cart.map((x) => {
+            debugger;
             let {id, item} = x;
-            let search = shopData.find((y) => y.id === id) ||[];
+            let search = shopData.find((y) => y.id === id);
+            
             return `
                 <div class="cart-item">
                     <img width="100px" src="${search.img}"/>
@@ -36,7 +40,7 @@ let generateCartItem = ()=>{
                 </div>
 
             `;
-        }).join(""));
+        }).join("");
     }else{
         shopingCart.innerHTML = ``;
         label.innerHTML = `
@@ -75,8 +79,10 @@ let decrement = (id) =>{
     }else{
         searchedItem.item--;
     }
+    
     update(selectedItem.id);
-    cart = cart.filter((x)=> x.item !== 0);
+    cart = cart.filter((y)=> y.item !== 0);
+    console.log(cart);
     generateCartItem();
     localStorage.setItem("cartData", JSON.stringify(cart));
 }
@@ -85,11 +91,39 @@ let update = (id) =>{
     let search = cart.find((x)=> x.id == id);
     document.getElementById(id).innerHTML = search.item;
     calculateTotalItem();
+    updateTotalAmount();
 }
 
 let removeItem = (id)=>{
     let selectedItem = id;
     cart = cart.filter((x)=> x.id !== selectedItem.id);
+    generateCartItem();
+    calculateTotalItem();
+    updateTotalAmount();
+    localStorage.setItem("cartData", JSON.stringify(cart));
+}
+
+let getTotalAmount = ()=>{
+    if(cart.length === 0) return;
+
+    return cart.map((x) => {
+        let {id, item} = x;
+        let search = shopData.find((y)=> y.id = id);
+        return search.price * item; 
+    }).reduce((x, y) => x + y, 0);
+}
+
+let updateTotalAmount =()=>{
+    let amount = getTotalAmount();
+    label.innerHTML = `
+        <h2>Total Bill: Rs ${amount}</h2>
+        <button class="checkout">Checkout</button>
+        <button onclick="clearCart()" class="removeAll">Clear Cart</button>
+    `;
+}
+
+let clearCart = ()=>{
+    cart = [];
     generateCartItem();
     calculateTotalItem();
     localStorage.setItem("cartData", JSON.stringify(cart));
@@ -98,3 +132,6 @@ let removeItem = (id)=>{
 calculateTotalItem();
 
 generateCartItem();
+
+updateTotalAmount();
+
