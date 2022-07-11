@@ -15,7 +15,7 @@ let generateCartItem = ()=>{
             debugger;
             let {id, item} = x;
             let search = shopData.find((y) => y.id === id);
-            
+            debugger;
             return `
                 <div class="cart-item">
                     <img width="100px" src="${search.img}"/>
@@ -34,7 +34,7 @@ let generateCartItem = ()=>{
                             </div>
                             <i onclick="increment(${id})" class="bi bi-plus-lg"></i>
                         </div>
-                        <h3>Rs ${search.price * item}</h3>
+                        <h3>Rs ${item * search.price}</h3>
                     </div>
 
                 </div>
@@ -53,7 +53,9 @@ let generateCartItem = ()=>{
 }
 
 
+
 let increment = (id) =>{
+    debugger;
     selectedItem = id;
     let searchedItem = cart.find((x) => x.id === selectedItem.id);
     if(searchedItem === undefined){
@@ -64,7 +66,8 @@ let increment = (id) =>{
     }else{
         searchedItem.item++;
     }
-    update(selectedItem.id);
+    calculateTotalItem();
+    updateTotalAmount();
     generateCartItem();
     localStorage.setItem("cartData", JSON.stringify(cart));
 }
@@ -80,35 +83,28 @@ let decrement = (id) =>{
         searchedItem.item--;
     }
     
-    update(selectedItem.id);
-    cart = cart.filter((y)=> y.item !== 0);
-    console.log(cart);
-    generateCartItem();
-    localStorage.setItem("cartData", JSON.stringify(cart));
-}
-
-let update = (id) =>{
-    let search = cart.find((x)=> x.id == id);
-    document.getElementById(id).innerHTML = search.item;
     calculateTotalItem();
     updateTotalAmount();
+    cart = cart.filter((y)=> y.item !== 0);
+    generateCartItem();
+    localStorage.setItem("cartData", JSON.stringify(cart));
 }
 
 let removeItem = (id)=>{
     let selectedItem = id;
     cart = cart.filter((x)=> x.id !== selectedItem.id);
+    updateTotalAmount();
     generateCartItem();
     calculateTotalItem();
-    updateTotalAmount();
     localStorage.setItem("cartData", JSON.stringify(cart));
 }
 
 let getTotalAmount = ()=>{
-    if(cart.length === 0) return;
+    if(cart.length === 0) return 0;
 
     return cart.map((x) => {
         let {id, item} = x;
-        let search = shopData.find((y)=> y.id = id);
+        let search = shopData.find((y)=> y.id === id);
         return search.price * item; 
     }).reduce((x, y) => x + y, 0);
 }
