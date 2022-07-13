@@ -12,6 +12,8 @@ form.addEventListener('submit', (e) =>{
     if(message.length> 0){
         e.preventDefault();
         alert(message.join(", "))
+    }else{
+        localStorage.setItem("isLogin", true);
     }
 })
 

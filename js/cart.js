@@ -9,7 +9,7 @@ let calculateTotalItem = ()=>{
 
 let generateCartItem = ()=>{
     debugger;
-    if(cart.length !== 0){
+    if(cart.length > 0){
         debugger;
         shopingCart.innerHTML = cart.map((x) => {
             debugger;
@@ -127,7 +127,8 @@ let clearCart = ()=>{
 
 calculateTotalItem();
 
+updateTotalAmount();
+
 generateCartItem();
 
-updateTotalAmount();
 
